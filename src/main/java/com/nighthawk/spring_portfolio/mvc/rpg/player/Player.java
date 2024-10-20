@@ -1,16 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.rpg.player;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,10 +16,6 @@ import static jakarta.persistence.FetchType.EAGER;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
 
@@ -111,18 +100,14 @@ public class Player {
             }
         }
     */
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Map<String,Map<String, Object>> stats = new HashMap<>(); 
-    
 
     /** Custom constructor for Person when building a new Person object from an API call
      */
-    public Player(String email, String password, String name, PlayerClass class) {
+    public Player(String email, String password, String name, PlayerClass playerclass) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.classes.add(class);
+        this.classes.add(playerclass);
     }
 
     /** 1st telescoping method to create a Person object with USER role
@@ -131,14 +116,14 @@ public class Player {
      * @param password
      * @return Player
      *  */ 
-    public static Player createPlayer(String name, String email, String password, String dob) {
+    public static Player createPlayer(String name, String email, String password) {
         // By default, Spring Security expects roles to have a "ROLE_" prefix.
-        return createPlayer(name, email, password, dob, Arrays.asList("ROLE_USER"));
+        return createPlayer(name, email, password, Arrays.asList("ROLE_USER"));
     }
     /** 2nd telescoping method to create a Person object with parameterized roles
-     * @param roles 
+     * @param classes 
      */
-    public static Player createPlayer(String name, String email, String password, String dob, List<String> classNames) {
+    public static Player createPlayer(String name, String email, String password, List<String> classNames) {
         Player player = new Player();
         player.setName(name);
         player.setEmail(email);
@@ -146,13 +131,13 @@ public class Player {
     
         List<PlayerClass> classes = new ArrayList<>();
         for (String className : classNames) {
-            PlayerClass class = new PlayerClass(className);
-            classes.add(class);
+            classes.add(new PlayerClass(className));  // Ensure constructor exists
         }
-        player.setRoles(roles);
+        player.setClasses(classes);
     
         return player;
     }
+    
    
     /** Static method to initialize an array list of Person objects 
      * @return Person[], an array of Person objects
