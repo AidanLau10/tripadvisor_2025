@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.Getter;
 
 import java.util.*;
-import java.text.SimpleDateFormat;
+
 
 /**
  * This class provides RESTful API endpoints for managing Player entities.
@@ -62,8 +62,8 @@ public class PlayerApiController {
      * Retrieves all the Player entities in the database, people
      * @return A ResponseEntity containing a list for Player entities 
      */
-    @GetMapping("/people")
-    public ResponseEntity<List<Player>> getPeople() {
+    @GetMapping("/players")
+    public ResponseEntity<List<Player>> getPlayers() {
         return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
@@ -131,7 +131,7 @@ public class PlayerApiController {
      * @param map of a key-value (k,v), the key is "term" and the value is the search term. 
      * @return A ResponseEntity containing a list of Player entities that match the search term.
      */
-    @PostMapping(value = "/people/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/players/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> playerSearch(@RequestBody final Map<String,String> map) {
         // extract term from RequestEntity
         String term = (String) map.get("term");
