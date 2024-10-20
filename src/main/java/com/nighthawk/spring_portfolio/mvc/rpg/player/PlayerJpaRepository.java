@@ -1,4 +1,4 @@
-package com.nighthawk.spring_portfolio.mvc.person;
+package com.nighthawk.spring_portfolio.mvc.rpg.player;
 
 import java.util.List;
 
@@ -25,25 +25,25 @@ import org.springframework.data.jpa.repository.Query;
  * 
  * When a method from this interface is called, the call is intercepted by a Spring Data JPA proxy, which directs the call to the appropriate method in the generated implementation.
  */
-public interface PersonJpaRepository extends JpaRepository<Person, Long> {
+public interface PlayerJpaRepository extends JpaRepository<Player, Long> {
 
     /**
      * Query methods defined by Spring Data JPA naming conventions.
      * Spring Data JPA will automatically generate a query using the method name.
      */
-    Person findByEmail(String email);
-    List<Person> findAllByOrderByNameAsc();
-    List<Person> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
-    Person findByEmailAndPassword(String email, String password);
+    Player findByEmail(String email);
+    List<Player> findAllByOrderByNameAsc();
+    List<Player> findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email);
+    Player findByEmailAndPassword(String email, String password);
 
     /**
      * Custom JPA query using the @Query annotation.
      * This allows for more complex queries that can't be expressed through the method name.
-     * The query will find all Person entities where the name or email contains the given term.
+     * The query will find all Player entities where the name or email contains the given term.
      * The 'nativeQuery = true' parameter indicates that the query is a native SQL query, not a JPQL query.
      */
     @Query(
-            value = "SELECT * FROM Person p WHERE p.name LIKE ?1 or p.email LIKE ?1",
+            value = "SELECT * FROM Player p WHERE p.name LIKE ?1 or p.email LIKE ?1",
             nativeQuery = true)
-    List<Person> findByLikeTermNative(String term);
+    List<Player> findByLikeTermNative(String term);
 }
