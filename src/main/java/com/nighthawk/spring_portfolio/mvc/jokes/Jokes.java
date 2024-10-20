@@ -1,10 +1,13 @@
 package com.nighthawk.spring_portfolio.mvc.jokes;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.*;
 
 @Data  // Annotations to simplify writing code (ie constructors, setters)
 @NoArgsConstructor

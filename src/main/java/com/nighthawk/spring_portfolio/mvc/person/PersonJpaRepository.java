@@ -1,9 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 /**
  * The PersonJpaRepository interface is automatically implemented by Spring Data JPA at runtime.
@@ -15,7 +15,7 @@ import java.util.List;
  * JpaRepository is a generic interface and requires two parameters:
  * 1. The entity type to be persisted (in this case, Person).
  * 2. The type of the entity's primary key (in this case, Long).
- * 
+ *  
  * JpaRepository provides several methods for interacting with the database, including:
  * - save(T entity): save an entity to the database. If T.id exists update, Else create/insert.
  * - findById(ID id): retrieve an entity by its id.
