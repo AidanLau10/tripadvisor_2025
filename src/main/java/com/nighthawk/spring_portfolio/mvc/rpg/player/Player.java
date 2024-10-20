@@ -82,25 +82,6 @@ public class Player {
     @Size(min = 2, max = 30, message = "Name (2 to 30 chars)")
     private String name;
 
-
-
-    /*
-    @NotEmpty
-    private String class;
-    */
-
-    /** stats is used to store JSON for daily stat$
-     * --- @JdbcTypeCode annotation is used to specify the JDBC type code for a column, in this case json.
-     * --- @Column annotation is used to specify the mapped column for a persistent property or field, in this case columnDefinition is specified as jsonb.
-     * * * Example of JSON data:
-        "stats": {
-            "2022-11-13": {
-                "calories": 2200,
-                "steps": 8000
-            }
-        }
-    */
-
     /** Custom constructor for Person when building a new Person object from an API call
      */
     public Player(String email, String password, String name, PlayerClass playerclass) {
@@ -144,12 +125,11 @@ public class Player {
      */
     public static Player[] init() {
         ArrayList<Player> players = new ArrayList<>();
-        players.add(createPlayer("Thomas Edison", "toby@gmail.com", "123toby", Arrays.asList("ROLE_ADMIN", "ROLE_USER", "ROLE_TESTER")));
-        players.add(createPlayer("Alexander Graham Bell", "lexb@gmail.com", "123lex"));
-        players.add(createPlayer("Nikola Tesla", "niko@gmail.com", "123niko"));
-        players.add(createPlayer("Madam Currie", "madam@gmail.com", "123madam"));
-        players.add(createPlayer("Grace Hopper", "hop@gmail.com", "123hop"));
-        players.add(createPlayer("John Mortensen", "jm1021@gmail.com", "123Qwerty!", Arrays.asList("ROLE_ADMIN")));
+        players.add(createPlayer("Aidan Lau", "alau@gmail.com", "123lau", Arrays.asList("ROLE_ADMIN", "ROLE_USER", "ROLE_TESTER")));
+        players.add(createPlayer("Saathvik Gampa", "sg@gmail.com", "123lex"));
+        players.add(createPlayer("Sri", "sri@gmail.com", "123niko"));
+        players.add(createPlayer("Tanav", "tanav@gmail.com", "123madam"));
+        players.add(createPlayer("Anika", "anika@gmail.com", "123hop"));
         return players.toArray(new Player[0]);
     }
 
