@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+
 import com.vladmihalcea.hibernate.type.json.JsonType;
 
 import lombok.AllArgsConstructor;
@@ -56,7 +57,7 @@ public class Player {
      * --- PersonRole is a POJO, Plain Old Java Object. 
      */
     @ManyToMany(fetch = EAGER)
-    private Collection<PlayerClass> classes = new ArrayList<>();
+    private Collection<PlayerCsClass> csclasses = new ArrayList<>();
 
     /** email, password, roles are key attributes to login and authentication
      * --- @NotEmpty annotation is used to validate that the annotated field is not null or empty, meaning it has to have a value.
@@ -84,11 +85,11 @@ public class Player {
 
     /** Custom constructor for Person when building a new Person object from an API call
      */
-    public Player(String email, String password, String name, PlayerClass playerclass) {
+    public Player(String email, String password, String name, PlayerCsClass csclass) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.classes.add(playerclass);
+        this.csclasses.add(csclass);
     }
 
     /** 1st telescoping method to create a Person object with USER role
@@ -99,22 +100,22 @@ public class Player {
      *  */ 
     public static Player createPlayer(String name, String email, String password) {
         // By default, Spring Security expects roles to have a "ROLE_" prefix.
-        return createPlayer(name, email, password, Arrays.asList("ROLE_USER"));
+        return createPlayer(name, email, password, Arrays.asList("CLASS_CSSE"));
     }
     /** 2nd telescoping method to create a Person object with parameterized roles
-     * @param classes 
+     * @param csclasses 
      */
-    public static Player createPlayer(String name, String email, String password, List<String> classNames) {
+    public static Player createPlayer(String name, String email, String password, List<String> csclassNames) {
         Player player = new Player();
         player.setName(name);
         player.setEmail(email);
         player.setPassword(password);
     
-        List<PlayerClass> classes = new ArrayList<>();
-        for (String className : classNames) {
-            classes.add(new PlayerClass(className));  // Ensure constructor exists
+        List<PlayerCsClass> csclasses = new ArrayList<>();
+        for (String className : csclassNames) {
+            csclasses.add(new PlayerCsClass(className));  // Ensure constructor exists
         }
-        player.setClasses(classes);
+        player.setCsclasses(csclasses);
     
         return player;
     }
@@ -125,11 +126,8 @@ public class Player {
      */
     public static Player[] init() {
         ArrayList<Player> players = new ArrayList<>();
-        players.add(createPlayer("Aidan Lau", "alau@gmail.com", "123lau", Arrays.asList("ROLE_ADMIN", "ROLE_USER", "ROLE_TESTER")));
-        players.add(createPlayer("Saathvik Gampa", "sg@gmail.com", "123lex"));
-        players.add(createPlayer("Sri", "sri@gmail.com", "123niko"));
-        players.add(createPlayer("Tanav", "tanav@gmail.com", "123madam"));
-        players.add(createPlayer("Anika", "anika@gmail.com", "123hop"));
+        
+        players.add(createPlayer("Saathvik Gampa", "sg@gmail.com", "123sg"));
         return players.toArray(new Player[0]);
     }
 

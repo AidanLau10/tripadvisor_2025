@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PlayerClass {
+public class PlayerCsClass {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,7 +18,7 @@ public class PlayerClass {
     @Column(unique=true)
     private String name;
 
-    public PlayerClass (String name) {
+    public PlayerCsClass (String name) {
         this.name = name;
     }
 }
