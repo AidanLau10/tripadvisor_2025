@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.nighthawk.spring_portfolio.mvc.jokes.Jokes;
 import com.nighthawk.spring_portfolio.mvc.jokes.JokesJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.note.Note;
@@ -14,6 +15,15 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
+
+import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerDetailsService;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
+
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
+
 import com.nighthawk.spring_portfolio.mvc.announcement.Announcement;
 import com.nighthawk.spring_portfolio.mvc.announcement.AnnouncementJPA;
 
@@ -29,6 +39,12 @@ public class ModelInit {
     @Autowired NoteJpaRepository noteRepo;
     @Autowired PersonRoleJpaRepository roleJpaRepository;
     @Autowired PersonDetailsService personDetailsService;
+
+    @Autowired PlayerCsClassJpaRepository csclassJpaRepository;
+    @Autowired PlayerDetailsService playerDetailsService;
+    @Autowired BadgeJpaRepository badgeJpaRepository;
+
+
     @Autowired AnnouncementJPA announcementJPA;
 
     @Bean
@@ -83,6 +99,38 @@ public class ModelInit {
                     String text = "Test " + person.getEmail();
                     Note n = new Note(text, person);  // constructor uses new person as Many-to-One association
                     noteRepo.save(n);  // JPA Save                  
+                }
+            }
+
+
+            Player[] playerArray = Player.init();
+            for (Player player : playerArray) {
+                // Name and email are used to lookup the player
+                List<Player> playerFound = playerDetailsService.searchPlayers(player.getName(), player.getEmail());  // lookup
+                if (playerFound.size() == 0) { // add if not found
+                    // Roles are added to the database if they do not exist
+                    List<PlayerCsClass> updatedCsClasses = new ArrayList<>();
+                    for (PlayerCsClass csclass : player.getCsclasses()) {
+                        // Name is used to lookup the role
+                        PlayerCsClass csclassFound = csclassJpaRepository.findByName(csclass.getName());  // JPA lookup
+                        if (csclassFound == null) { // add if not found
+                            // Save the new role to database
+                            csclassJpaRepository.save(csclass);  // JPA save
+                            csclassFound = csclass;
+                        }
+                        // Accumulate reference to role from database
+                        updatedCsClasses.add(csclassFound);
+                    }
+                    // Update person with roles from role databasea
+                    player.setCsclasses(updatedCsClasses); // Object reference is updated
+
+                    // Save player to database
+                    playerDetailsService.savePlayer(player); // JPA save
+
+                    // Add a "test note" for each new person
+                    String text = "Test " + player.getEmail();
+                    Badge badge = new Badge(text, player);  // constructor uses new person as Many-to-One association
+                    badgeJpaRepository.save(badge);  // JPA Save                  
                 }
             }
 
