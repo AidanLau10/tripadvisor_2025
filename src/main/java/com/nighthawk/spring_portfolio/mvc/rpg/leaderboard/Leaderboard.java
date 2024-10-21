@@ -33,19 +33,17 @@ public class Leaderboard {
     @Column(columnDefinition="RANK")
     private long rank;
 
-    @NotNull
-    @Column(columnDefinition="NAME")
-    private String name;
+
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "player_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private Player player;
+    private Player playerId;
 
-    public Leaderboard(String name, Player player) {
-        this.name = name;
-        this.player = player;
+    public Leaderboard( Long rank, Player playerId) {
+        this.rank = rank;
+        this.playerId = playerId;
     }
 
 
