@@ -1,16 +1,27 @@
 package com.nighthawk.spring_portfolio.mvc.rpg.player;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
 
 import lombok.Getter;
-
-import java.util.*;
 
 
 /**
@@ -18,7 +29,7 @@ import java.util.*;
  * It includes endpoints for creating, retrieving, updating, and deleting Player entities.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/rpg_api")
 public class PlayerApiController {
     /*
     #### RESTful API REFERENCE ####
@@ -29,8 +40,10 @@ public class PlayerApiController {
      * Repository for accessing Player entities in the database.
      */
     @Autowired
-    private PlayerJpaRepository repository;
+    private PlayerJpaRepository playerJpaRepository;
 
+    @Autowired
+    private BadgeJpaRepository badgeJpaRepository;
     /**
      * Service for managing Player entities.
      */
@@ -48,7 +61,7 @@ public class PlayerApiController {
         String email = userDetails.getUsername();  // Email is mapped/unmapped to username for Spring Security
 
         // Find a Player by username
-        Player player = repository.findByEmail(email);
+        Player player = playerJpaRepository.findByEmail(email);
 
         // Return the Player if found
         if (player != null) {
@@ -64,7 +77,7 @@ public class PlayerApiController {
      */
     @GetMapping("/players")
     public ResponseEntity<List<Player>> getPlayers() {
-        return new ResponseEntity<>( repository.findAllByOrderByNameAsc(), HttpStatus.OK);
+        return new ResponseEntity<>( playerJpaRepository.findAllByOrderByNameAsc(), HttpStatus.OK);
     }
 
     /**
@@ -75,7 +88,7 @@ public class PlayerApiController {
      */
     @GetMapping("/player/{id}")
     public ResponseEntity<Player> getPlayer(@PathVariable long id) {
-        Optional<Player> optional = repository.findById(id);
+        Optional<Player> optional = playerJpaRepository.findById(id);
         if (optional.isPresent()) {  // Good ID
             Player player = optional.get();  // value from findByID
             return new ResponseEntity<>(player, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
@@ -92,10 +105,10 @@ public class PlayerApiController {
      */
     @DeleteMapping("/player/{id}")
     public ResponseEntity<Player> deletePlayer(@PathVariable long id) {
-        Optional<Player> optional = repository.findById(id);
+        Optional<Player> optional = playerJpaRepository.findById(id);
         if (optional.isPresent()) {  // Good ID
             Player player = optional.get();  // value from findByID
-            repository.deleteById(id);  // value from findByID
+            playerJpaRepository.deleteById(id);  // value from findByID
             return new ResponseEntity<>(player, HttpStatus.OK);  // OK HTTP response: status code, headers, and body
         }
         // Bad ID
@@ -110,6 +123,7 @@ public class PlayerApiController {
         private String email;
         private String password;
         private String name;
+        private List<PlayerCsClass> csClasses;
     }
 
     /**
@@ -137,10 +151,27 @@ public class PlayerApiController {
         String term = (String) map.get("term");
 
         // JPA query to filter on term
-        List<Player> list = repository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
+        List<Player> list = playerJpaRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(term, term);
 
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+
+    @GetMapping("/playerbadges/{playerId}")
+    public ResponseEntity<List<Badge>> getBadges(@PathVariable Long playerId) {
+        
+        // Find badges by playerId
+        List<Badge> badges = badgeJpaRepository.findByPlayerId(playerId);
+        
+        if (!badges.isEmpty()) {  // If badges exist for the player
+            return new ResponseEntity<>(badges, HttpStatus.OK);
+        }
+        
+        // If no badges are found for the given playerId
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    
 
 }
