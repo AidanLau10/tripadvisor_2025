@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
-
 import lombok.Getter;
 
 
@@ -29,7 +26,7 @@ import lombok.Getter;
  * It includes endpoints for creating, retrieving, updating, and deleting Player entities.
  */
 @RestController
-@RequestMapping("/rpg_api")
+@RequestMapping("/rpg_api/player")
 public class PlayerApiController {
     /*
     #### RESTful API REFERENCE ####
@@ -41,9 +38,6 @@ public class PlayerApiController {
      */
     @Autowired
     private PlayerJpaRepository playerJpaRepository;
-
-    @Autowired
-    private BadgeJpaRepository badgeJpaRepository;
     /**
      * Service for managing Player entities.
      */
@@ -156,22 +150,4 @@ public class PlayerApiController {
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
-
-    @GetMapping("/playerbadges/{playerId}")
-    public ResponseEntity<List<Badge>> getBadges(@PathVariable Long playerId) {
-        
-        // Find badges by playerId
-        List<Badge> badges = badgeJpaRepository.findByPlayerId(playerId);
-        
-        if (!badges.isEmpty()) {  // If badges exist for the player
-            return new ResponseEntity<>(badges, HttpStatus.OK);
-        }
-        
-        // If no badges are found for the given playerId
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-    
-
 }
