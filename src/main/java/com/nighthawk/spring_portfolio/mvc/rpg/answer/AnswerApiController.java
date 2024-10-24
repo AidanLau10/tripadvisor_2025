@@ -24,13 +24,14 @@ public class AnswerApiController {
 
     @Getter 
     public static class AnswerDto {
+        private String content;
         private Question question;
         private Player player;
         private Long chatScore; 
     }
     @PostMapping("/submitanswer") 
     public ResponseEntity<Answer> postAnswer(@RequestBody AnswerDto answerDto) {
-        Answer answer = new Answer(answerDto.getQuestion(), answerDto.getPlayer(), answerDto.getChatScore());
+        Answer answer = new Answer(answerDto.getContent(), answerDto.getQuestion(), answerDto.getPlayer(), answerDto.getChatScore());
         answerJpaRepository.save(answer);
         
         return new ResponseEntity<>(answer, HttpStatus.OK);

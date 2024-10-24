@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,9 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Lob
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Question question;
 
@@ -38,11 +42,14 @@ public class Answer {
     @JsonIgnore
     private Player player;
 
+    // add date
     private Long chatScore;
 
-    public Answer (Question question, Player player, Long chatScore) {
+    public Answer (String content, Question question, Player player, Long chatScore) {
+        this.content = content;
         this.question = question;
         this.player = player;
         this.chatScore = chatScore;
     }
+
 }
