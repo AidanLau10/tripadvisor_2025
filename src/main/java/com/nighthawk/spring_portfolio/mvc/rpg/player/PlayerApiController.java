@@ -26,7 +26,7 @@ import lombok.Getter;
  * It includes endpoints for creating, retrieving, updating, and deleting Player entities.
  */
 @RestController
-@RequestMapping("/rpg_api/player")
+@RequestMapping("/rpg_player")
 public class PlayerApiController {
     /*
     #### RESTful API REFERENCE ####

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/rpg_api/badge")
+@RequestMapping("/rpg_badge")
 public class BadgeApiController {
 
     @Autowired

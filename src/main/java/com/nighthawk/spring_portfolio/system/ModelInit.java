@@ -1,12 +1,17 @@
 package com.nighthawk.spring_portfolio.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import com.nighthawk.spring_portfolio.mvc.announcement.Announcement;
+import com.nighthawk.spring_portfolio.mvc.announcement.AnnouncementJPA;
 import com.nighthawk.spring_portfolio.mvc.jokes.Jokes;
 import com.nighthawk.spring_portfolio.mvc.jokes.JokesJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.note.Note;
@@ -15,22 +20,15 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
-
-import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
-import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerDetailsService;
-import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
-import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
-
+import com.nighthawk.spring_portfolio.mvc.rpg.answer.AnswerJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
 import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerDetailsService;
+import com.nighthawk.spring_portfolio.mvc.rpg.question.QuestionJpaRepository;
 
-import com.nighthawk.spring_portfolio.mvc.announcement.Announcement;
-import com.nighthawk.spring_portfolio.mvc.announcement.AnnouncementJPA;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @Configuration // Scans Application for ModelInit Bean, this detects CommandLineRunner
@@ -46,6 +44,9 @@ public class ModelInit {
 
 
     @Autowired AnnouncementJPA announcementJPA;
+
+    @Autowired AnswerJpaRepository answerJpaRepository;
+    @Autowired QuestionJpaRepository questionJpaRepository;
 
     @Bean
     @Transactional
@@ -130,9 +131,11 @@ public class ModelInit {
                     // Add a "test note" for each new person
                     String text = "Test " + player.getEmail();
                     Badge badge = new Badge(text, player);  // constructor uses new person as Many-to-One association
-                    badgeJpaRepository.save(badge);  // JPA Save                  
+                    badgeJpaRepository.save(badge);  // JPA Save     
                 }
             }
+
+            
 
         };
     }
