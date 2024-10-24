@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuestionJpaRepository extends JpaRepository<Question, Long> {
 
-
-    List<Question> findByBadgeId(Long badgeId);
-
+    List<Question> findByTitle(String title);
 }
 

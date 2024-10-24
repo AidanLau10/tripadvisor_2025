@@ -21,12 +21,11 @@ import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.rpg.answer.AnswerJpaRepository;
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerDetailsService;
+import com.nighthawk.spring_portfolio.mvc.rpg.question.Question;
 import com.nighthawk.spring_portfolio.mvc.rpg.question.QuestionJpaRepository;
 
 
@@ -40,7 +39,6 @@ public class ModelInit {
 
     @Autowired PlayerCsClassJpaRepository csclassJpaRepository;
     @Autowired PlayerDetailsService playerDetailsService;
-    @Autowired BadgeJpaRepository badgeJpaRepository;
 
 
     @Autowired AnnouncementJPA announcementJPA;
@@ -71,6 +69,14 @@ public class ModelInit {
                     jokesRepo.save(new Jokes(null, joke, 0, 0)); //JPA save
             }
 
+            Question[] questionArray = Question.init();
+            for (Question question : questionArray) {
+                List<Question> questionFound = questionJpaRepository.findByTitle(question.getTitle());
+                if (questionFound == null) {
+                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name(), question.getBadge_icon()));
+                }
+            }
+ 
             // Person database is populated with starting people
             Person[] personArray = Person.init();
             for (Person person : personArray) {
@@ -127,15 +133,11 @@ public class ModelInit {
 
                     // Save player to database
                     playerDetailsService.savePlayer(player); // JPA save
-
-                    // Add a "test note" for each new person
-                    String text = "Test " + player.getEmail();
-                    Badge badge = new Badge(text, player);  // constructor uses new person as Many-to-One association
-                    badgeJpaRepository.save(badge);  // JPA Save     
                 }
             }
 
-            
+
+
 
         };
     }
