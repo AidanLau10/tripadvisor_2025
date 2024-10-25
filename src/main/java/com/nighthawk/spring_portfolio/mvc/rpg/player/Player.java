@@ -130,19 +130,5 @@ public class Player {
         players.add(createPlayer("Saathvik Gampa", "sg@gmail.com", "123sg"));
         return players.toArray(new Player[0]);
     }
-
-    /** Static method to print Person objects from an array
-     * @param args, not used
-     */
-    public static void main(String[] args) {
-        // obtain Person from initializer
-        Player players[] = init();
-
-        // iterate using "enhanced for loop"
-        for( Player player : players) {
-            System.out.println(player);  // print object
-        }
-    }
-
     
 }
