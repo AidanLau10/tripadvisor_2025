@@ -20,7 +20,7 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
-import com.nighthawk.spring_portfolio.mvc.rpg.answer.AnswerJpaRepository;
+
 import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
@@ -43,7 +43,6 @@ public class ModelInit {
 
     @Autowired AnnouncementJPA announcementJPA;
 
-    @Autowired AnswerJpaRepository answerJpaRepository;
     @Autowired QuestionJpaRepository questionJpaRepository;
 
     @Bean
