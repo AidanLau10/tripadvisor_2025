@@ -55,5 +55,24 @@ public class AnswerApiController {
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
 
+    // @GetMapping("/leaderboard") 
+    // public ResponseEntity<List<Player>> getLeaderboard() {
+
+        // int badgeCount = answerJpaRepository.countByPlayer(player);
+        /* Leaderboard:
+        - Rank(1/2/3/4)
+        - Player(Randall)
+        - Points(1,000,000)
+        - Questions Answered(12)
+        - Badge Count(12)
+        - Class(CSA, CSP, CSSE)
+        - Average Chat Score(1-1000, 1000 being highest rating)
+         */
+
+        // Nice feature: for each question, can view the player with the highest chatScore
+        // Able to view their answer 
+        // return new ResponseEntity<>(leaderboard, HttpStatus.OK);
+    //}
+
     
 }

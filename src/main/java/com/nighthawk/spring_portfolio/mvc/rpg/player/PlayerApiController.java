@@ -150,4 +150,10 @@ public class PlayerApiController {
         // return resulting list and status, error checking should be added
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+    /* 
+    @GetMapping("/badgecount")
+    public ResponseEntity<Object> getBadgeCount() {
+
+    }
+    */
 }

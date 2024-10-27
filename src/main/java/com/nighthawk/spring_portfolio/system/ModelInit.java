@@ -71,7 +71,7 @@ public class ModelInit {
             for (Question question : questionArray) {
                 Question questionFound = questionJpaRepository.findByTitle(question.getTitle());
                 if (questionFound == null) {
-                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name()));
+                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name(), question.getPoints()));
                 }
             }
  
