@@ -20,7 +20,6 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
-
 import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
@@ -70,9 +69,9 @@ public class ModelInit {
 
             Question[] questionArray = Question.init();
             for (Question question : questionArray) {
-                List<Question> questionFound = questionJpaRepository.findByTitle(question.getTitle());
+                Question questionFound = questionJpaRepository.findByTitle(question.getTitle());
                 if (questionFound == null) {
-                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name(), question.getBadge_icon()));
+                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name(), question.getPoints()));
                 }
             }
  
