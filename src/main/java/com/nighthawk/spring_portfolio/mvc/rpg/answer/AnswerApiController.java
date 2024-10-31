@@ -58,6 +58,38 @@ public class AnswerApiController {
         
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
+    private Long getChatScore(String content, String rubric) {
+        try {
+            String requestBody = "{ \"model\": \"gpt-3.5-turbo\", \"messages\": ["
+                                 + "{\"role\": \"system\", \"content\": \"" + rubric + "\"},"
+                                 + "{\"role\": \"user\", \"content\": \"" + content + "\"} ] }";
+    
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + apiKey)
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+    
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    
+            System.out.println("Response Code: " + response.statusCode());
+            System.out.println("Response Body: " + response.body());
+    
+            if (response.statusCode() == HttpStatus.OK.value()) {
+                return parseScoreFromResponse(response.body());
+            } else {
+                // Log error response
+                System.out.println("Error: " + response.body());
+                return 0L; 
+            }
+    
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace(); 
+            return 0L;  
+        }
+    }
 
     
 }
