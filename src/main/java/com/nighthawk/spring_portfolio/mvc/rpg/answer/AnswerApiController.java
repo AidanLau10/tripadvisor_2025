@@ -91,5 +91,29 @@ public class AnswerApiController {
         }
     }
 
-    
+        
+
+    private Long parseScoreFromResponse(String responseBody) {
+        try {
+            // Create an ObjectMapper instance
+            ObjectMapper objectMapper = new ObjectMapper();
+        
+            JsonNode rootNode = objectMapper.readTree(responseBody);
+            
+            String content = rootNode.path("choices").get(0).path("message").path("content").asText();
+
+            if (content.contains("relevant")) {
+                return 10L;
+            } else if (content.contains("clarification")) {
+                return 8L;
+            } else {
+                return 5L;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0L;
+        }
+    }
+
 }
