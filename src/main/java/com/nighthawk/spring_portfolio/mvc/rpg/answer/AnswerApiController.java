@@ -43,14 +43,6 @@ public class AnswerApiController {
     private PlayerJpaRepository playerJpaRepository;
 
 
-<<<<<<< HEAD
-=======
-    @Autowired
-    private QuestionJpaRepository questionJpaRepository;
-
-    @Autowired
-    private PlayerJpaRepository playerJpaRepository;
->>>>>>> Aidan's-Branch
     @Getter 
     public static class AnswerDto {
         private String content;
