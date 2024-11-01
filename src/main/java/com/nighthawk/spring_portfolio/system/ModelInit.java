@@ -20,6 +20,8 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
+import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.Player;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClass;
 import com.nighthawk.spring_portfolio.mvc.rpg.player.PlayerCsClassJpaRepository;
@@ -44,6 +46,8 @@ public class ModelInit {
 
     @Autowired QuestionJpaRepository questionJpaRepository;
 
+    @Autowired BadgeJpaRepository badgeJpaRepository;
+
     @Bean
     @Transactional
     CommandLineRunner run() {  // The run() method will be executed after the application starts
@@ -67,11 +71,22 @@ public class ModelInit {
                     jokesRepo.save(new Jokes(null, joke, 0, 0)); //JPA save
             }
 
-            Question[] questionArray = Question.init();
+            Badge[] badgeArray = Badge.init();
+            for (Badge badge : badgeArray) {
+                Badge badgeFound = badgeJpaRepository.findByName(badge.getName());
+                if (badgeFound == null) {
+                    badgeJpaRepository.save(new Badge(badge.getName()));
+                }
+            }
+
+            List<Badge> badges = badgeJpaRepository.findAll(); // Fetch all badges from the repository
+
+            // Initialize questions with the fetched badges
+            Question[] questionArray = Question.init(badges);
             for (Question question : questionArray) {
                 Question questionFound = questionJpaRepository.findByTitle(question.getTitle());
                 if (questionFound == null) {
-                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge_name(), question.getPoints()));
+                    questionJpaRepository.save(new Question(question.getTitle(), question.getContent(), question.getBadge(), question.getPoints()));
                 }
             }
  

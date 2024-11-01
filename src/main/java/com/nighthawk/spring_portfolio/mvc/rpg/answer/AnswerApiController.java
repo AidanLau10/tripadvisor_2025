@@ -42,6 +42,11 @@ public class AnswerApiController {
     @Autowired
     private PlayerJpaRepository playerJpaRepository;
 
+    
+
+
+
+
 
     @Getter 
     public static class AnswerDto {
