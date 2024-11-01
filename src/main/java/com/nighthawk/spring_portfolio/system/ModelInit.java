@@ -47,7 +47,7 @@ public class ModelInit {
     @Autowired QuestionJpaRepository questionJpaRepository;
 
     @Autowired BadgeJpaRepository badgeJpaRepository;
-    
+
     @Bean
     @Transactional
     CommandLineRunner run() {  // The run() method will be executed after the application starts
@@ -69,6 +69,14 @@ public class ModelInit {
                 List<Jokes> jokeFound = jokesRepo.findByJokeIgnoreCase(joke);  // JPA lookup
                 if (jokeFound.size() == 0)
                     jokesRepo.save(new Jokes(null, joke, 0, 0)); //JPA save
+            }
+
+            Badge[] badgeArray = Badge.init();
+            for (Badge badge : badgeArray) {
+                Badge badgeFound = badgeJpaRepository.findByName(badge.getName());
+                if (badgeFound == null) {
+                    badgeJpaRepository.save(new Badge(badge.getName()));
+                }
             }
 
             List<Badge> badges = badgeJpaRepository.findAll(); // Fetch all badges from the repository

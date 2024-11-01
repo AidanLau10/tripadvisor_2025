@@ -1,11 +1,14 @@
 package com.nighthawk.spring_portfolio.mvc.rpg.badge;
-
 import java.util.ArrayList;
+import java.util.List;
+
+import com.nighthawk.spring_portfolio.mvc.rpg.question.Question;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +23,14 @@ public class Badge {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "badge")
+    private List<Question> questions; 
+
+
+    public Badge(String name) {
+        this.name = name;
+    }
 
     public static Badge createBadge(String name) {
         Badge badge = new Badge();

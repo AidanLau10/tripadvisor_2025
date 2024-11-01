@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
 import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
 
 @Service
@@ -114,7 +113,4 @@ public class PlayerDetailsService implements UserDetailsService {
         }
     }
 
-    public List<Badge> getPlayerBadges(Player player) {
-        return badgeJpaRepository.findDistinctByQuestionsAnswersPlayer(player);
-    }
 }
