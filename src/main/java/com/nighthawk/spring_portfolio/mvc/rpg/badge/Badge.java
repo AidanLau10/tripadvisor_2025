@@ -1,5 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.rpg.badge;
 
+import java.util.ArrayList;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,5 +20,29 @@ public class Badge {
     private Long id;
 
     private String name;
-    private String description;
+
+    public static Badge createBadge(String name) {
+        Badge badge = new Badge();
+        badge.setName(name);
+
+        return badge;
+    }
+
+    public static Badge[] init() {
+        ArrayList<Badge> badges = new ArrayList<>();
+    
+        badges.add(createBadge("Badge 1"));
+
+        
+        return badges.toArray(new Badge[0]);
+    }
+
+    public static void main(String[] args) {
+    
+        Badge badges[] = init();
+
+        for( Badge badge : badges) {
+            System.out.println(badge);  
+        }
+    }
 }

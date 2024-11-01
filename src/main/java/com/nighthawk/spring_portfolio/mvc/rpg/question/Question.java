@@ -1,11 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.rpg.question;
 
-
-
 import java.util.ArrayList;
+import java.util.List;
 
 import com.nighthawk.spring_portfolio.mvc.rpg.badge.Badge;
-import com.nighthawk.spring_portfolio.mvc.rpg.badge.BadgeJpaRepository;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -75,14 +73,30 @@ public class Question {
         return question;
     }
 
-    Badge badge = badgeJpaRepository.findById(1L)  // assume badge ID is 1
-                                     .orElseThrow(() -> new RuntimeException("Badge not found"));
-
-    public static Question[] init() {
+    
+    public static Question[] init(List<Badge> badges) {
         ArrayList<Question> questions = new ArrayList<>();
+    
+        // Example of creating questions for each badge
+        for (Badge badge : badges) {
+            // Customize your question titles and content as needed
+            questions.add(createQuestion("Unit 1 Popcorn Hack 1", "What is the output of the following code cell?", badge, 10000));
+        }
         
-        // byte[] badgeIcon = loadImageAsByteArray("path/to/your/image.png");
-        questions.add(createQuestion("Unit 1 Popcorn Hack 1", "What is the output of the following code cell?", badge, 10000));
         return questions.toArray(new Question[0]);
     }
+
+    /* 
+    public static void main(String[] args) {
+        List<Badge> badges = badgeJpaRepository.findAll();
+
+        // Initialize questions with the fetched badges
+        Question[] questions = Question.init(badges);
+
+        // Print each question
+        for (Question question : questions) {
+            System.out.println(question);
+        }
+    }
+    */
 }
