@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Getter;
 
-/**
- * This class provides RESTful API endpoints for managing Streak entities.
- * It includes endpoints for creating, retrieving, and deleting Streak entities.
- */
 @RestController
 @RequestMapping("/rpg_streak")
 public class StreakApiController {
@@ -28,15 +25,9 @@ public class StreakApiController {
     @Autowired
     private StreakJpaRepository streakJpaRepository;
 
-    /**
-     * Retrieves a Streak entity by its ID.
-     *
-     * @param id The ID of the Streak entity to retrieve.
-     * @return A ResponseEntity containing the Streak entity if found, or a NOT_FOUND status if not found.
-     */
     @GetMapping("/streak/{id}")
     public ResponseEntity<Streak> getStreak(@PathVariable long id) {
-        Optional<Streak> optional = StreakJpaRepository.findById(id);
+        Optional<Streak> optional = streakJpaRepository.findById(id);
         if (optional.isPresent()) {
             Streak streak = optional.get();
             return new ResponseEntity<>(streak, HttpStatus.OK);
@@ -44,34 +35,22 @@ public class StreakApiController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * Retrieves all Streak entities in the database.
-     * 
-     * @return A ResponseEntity containing a list of Streak entities.
-     */
     @GetMapping("/streak")
     public ResponseEntity<List<Streak>> getStreak() {
-        return new ResponseEntity<>(StreakJpaRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(streakJpaRepository.findAll(), HttpStatus.OK);
     }
 
-    /**
-     * Deletes a Streak entity by its ID.
-     *
-     * @param id The ID of the Streak entity to delete.
-     * @return A ResponseEntity containing the Streak entity if deleted, or a NOT_FOUND status if not found.
-     */
     @DeleteMapping("/streak/{id}")
     public ResponseEntity<Streak> deleteStreak(@PathVariable long id) {
-        Optional<Streak> optional = StreakJpaRepository.findById(id);
+        Optional<Streak> optional = streakJpaRepository.findById(id);
         if (optional.isPresent()) {
             Streak streak = optional.get();
-            StreakJpaRepository.deleteById(id);
+            streakJpaRepository.deleteById(id);
             return new ResponseEntity<>(streak, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    /* DTO (Data Transfer Object) to support POST request for postStreak method */
     @Getter
     public static class StreakDto {
         private Long userId;
@@ -81,29 +60,25 @@ public class StreakApiController {
         private String lastResetDate;
     }
 
-    /**
-     * Creates a new Streak entity.
-     * 
-     * @param streakDto The DTO object containing streak data.
-     * @return A ResponseEntity containing a success message if the Streak entity is created, or a BAD_REQUEST status if not created.
-     */
     @PostMapping("/streak")
     public ResponseEntity<Object> postStreak(@RequestBody StreakDto streakDto) {
-        // Create a new Streak entity using the provided DTO
         Streak streak = new Streak(streakDto.getUserId(), streakDto.getCurrentStreak(), streakDto.getMaxStreak(), streakDto.getLastInteractionDate(), streakDto.getLastResetDate());
-        treakJpaRepository.save(streak);
+        streakJpaRepository.save(streak);
         return new ResponseEntity<>("Streak created successfully", HttpStatus.CREATED);
     }
 
-    /**
-     * Search for Streaks by userId or maxStreak.
-     * @param map of key-value (k, v), where the key is "term" and the value is the search term.
-     * @return A ResponseEntity containing a list of Streak entities that match the search term.
-     */
     @PostMapping("/streak/search")
     public ResponseEntity<Object> streakSearch(@RequestBody final Map<String, String> map) {
         String term = map.get("term");
-        List<Streak> list = StreakJpaRepository.findByUserIdOrMaxStreak(Long.parseLong(term), Integer.parseInt(term));
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        if (term == null || term.isEmpty()) {
+            return new ResponseEntity<>("Term is missing or empty", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            Long userId = Long.parseLong(term);
+            List<Streak> listByUserId = streakJpaRepository.findByUserId(userId);
+            return new ResponseEntity<>(listByUserId, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>("Term must be a valid number", HttpStatus.BAD_REQUEST);
+        }
     }
 }
